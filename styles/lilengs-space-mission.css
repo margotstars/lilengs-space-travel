@@ -470,9 +470,9 @@ h1 {
 
 .reaction {
     position: absolute;
-    bottom: 108%;
-    left: 57%;
-    z-index: 7;
+    top: 0;
+    left: 0;
+    z-index: 9;
     display: flex;
     align-items: center;
     justify-content: center;

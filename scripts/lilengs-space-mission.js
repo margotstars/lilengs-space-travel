@@ -60,6 +60,7 @@
 
     const getElement = (id) => document.getElementById(id);
     const elements = {
+        board: getElement("board"),
         avatar: getElement("avatar"),
         reaction: getElement("reaction"),
         stageText: getElement("chipStage"),
@@ -84,6 +85,7 @@
         soundEnabled: true,
         reactionTimer: null,
         landingTimer: null,
+        reactionFrame: null,
     };
     const sounds = {
         up: new Audio("sounds/up.wav"),
@@ -98,6 +100,45 @@
     function placeAvatar(position) {
         elements.avatar.style.left = xPercent(position.x);
         elements.avatar.style.top = yPercent(position.y);
+        updateReactionPlacement();
+    }
+
+    function updateReactionPlacement() {
+        if (!elements.reaction.textContent) {
+            return;
+        }
+
+        const board = elements.board.getBoundingClientRect();
+        const avatar = elements.avatar.getBoundingClientRect();
+        const width = elements.reaction.offsetWidth;
+        const height = elements.reaction.offsetHeight;
+        const angle = 5 * Math.PI / 180;
+        // Reserve room for the rotated bubble and the appearance animation's overshoot.
+        const halfWidth = (width * Math.cos(angle) + height * Math.sin(angle)) * 0.55;
+        const halfHeight = (height * Math.cos(angle) + width * Math.sin(angle)) * 0.55;
+        const margin = 8;
+        const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(value, maximum));
+        const preferredX = avatar.left - board.left - elements.board.clientLeft + avatar.width * 0.57;
+        const preferredY = avatar.top - board.top - elements.board.clientTop - avatar.height * 0.08 - height / 2;
+        const avatarLeft = avatar.left - board.left - elements.board.clientLeft;
+        const avatarRight = avatarLeft + avatar.width;
+        const leftSpace = avatarLeft - margin;
+        const rightSpace = elements.board.clientWidth - avatarRight - margin;
+        const sideX = leftSpace >= rightSpace
+            ? avatarLeft - margin - halfWidth
+            : avatarRight + margin + halfWidth;
+        const ceilingOverlap = Math.max(0, margin + halfHeight - preferredY);
+        const sideProgress = Math.min(1, ceilingOverlap / height);
+        const shiftedX = preferredX + (sideX - preferredX) * sideProgress;
+        const centerX = clamp(shiftedX, margin + halfWidth, elements.board.clientWidth - margin - halfWidth);
+        const centerY = clamp(preferredY, margin + halfHeight, elements.board.clientHeight - margin - halfHeight);
+        elements.reaction.style.left = `${centerX}px`;
+        elements.reaction.style.top = `${centerY - height / 2}px`;
+    }
+
+    function trackReaction() {
+        updateReactionPlacement();
+        state.reactionFrame = requestAnimationFrame(trackReaction);
     }
 
     function playSound(type) {
@@ -150,6 +191,7 @@
         clearTimeout(state.reactionTimer);
         elements.reaction.className = `reaction ${mood} show`;
         elements.reaction.textContent = text;
+        updateReactionPlacement();
         state.reactionTimer = setTimeout(() => {
             if (!state.moving && state.positionIndex !== PLANET_INDEX) {
                 elements.reaction.classList.remove("show");
@@ -246,9 +288,12 @@
         elements.minus.disabled = true;
         elements.controls.classList.toggle("is-positive", direction > 0);
         elements.controls.classList.toggle("is-negative", direction < 0);
+        trackReaction();
     }
 
     function finishMovement() {
+        cancelAnimationFrame(state.reactionFrame);
+        state.reactionFrame = null;
         elements.stageCard.classList.remove("is-travelling");
         state.moving = false;
         elements.controls.classList.remove("is-positive", "is-negative");
@@ -388,6 +433,7 @@
         elements.plus.addEventListener("click", () => move(1));
         elements.minus.addEventListener("click", () => move(-1));
         document.addEventListener("keydown", handleKeydown);
+        new ResizeObserver(updateReactionPlacement).observe(elements.board);
         placeAvatar(POSITIONS[0]);
         refresh();
     }
