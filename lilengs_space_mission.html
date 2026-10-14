@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#090e2b">
+    <title>Lileng’s Space Adventure — English Class Game</title>
+    <link rel="stylesheet" href="styles/lilengs-space-mission.css">
+    <script src="scripts/lilengs-space-mission.js" defer></script>
+    <script src="scripts/magic-wand.js" defer></script>
+</head>
+<body>
+<div class="app">
+    <header class="topbar">
+        <div class="brand"><span class="brand-icon" aria-hidden="true">🛸</span>
+            <div>
+                <h1 aria-label="Lileng’s Space Adventure">
+                    <span aria-hidden="true">
+                        <span class="title-word">
+                            <span class="title-letter">L</span>
+                            <span class="title-letter">i</span>
+                            <span class="title-letter">l</span>
+                            <span class="title-letter">e</span>
+                            <span class="title-letter">n</span>
+                            <span class="title-letter">g</span>
+                            <span class="title-letter">’</span>
+                            <span class="title-letter">s</span>
+                        </span>
+                        <span class="title-word">
+                            <span class="title-letter">S</span>
+                            <span class="title-letter">p</span>
+                            <span class="title-letter">a</span>
+                            <span class="title-letter">c</span>
+                            <span class="title-letter">e</span>
+                        </span>
+                        <span class="title-word">
+                            <span class="title-letter">A</span>
+                            <span class="title-letter">d</span>
+                            <span class="title-letter">v</span>
+                            <span class="title-letter">e</span>
+                            <span class="title-letter">n</span>
+                            <span class="title-letter">t</span>
+                            <span class="title-letter">u</span>
+                            <span class="title-letter">r</span>
+                            <span class="title-letter">e</span>
+                        </span>
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <p class="subtitle"><span class="subtitle-icon" aria-hidden="true">🚀</span><span>Help Lileng reach the <strong>Happy Planet!</strong></span>
+        </p>
+    </header>
+    <main class="game-area">
+        <div class="board" id="board" aria-label="Space game board with eight numbered stars">
+            <img class="background-art" src="background.png"
+                 alt="Space game board: eight numbered stars lead from the polluted planet to the happy planet. Three English classroom rules appear below."
+                 draggable="false">
+            <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+            <div class="avatar" id="avatar" aria-label="Lileng on Star 1">
+                <div class="landing-spark" aria-hidden="true"></div>
+                <div class="emotion-effects" aria-hidden="true"><span class="joy">✨</span><span
+                        class="joy">🌟</span><span class="joy">⭐</span><span class="tear">💧</span><span
+                        class="tear">💧</span><span class="tear">💧</span></div>
+                <div class="reaction" id="reaction" aria-hidden="true"></div>
+                <img class="lil-eng" src="lileng.png" alt="Lileng the alien in a spacesuit" draggable="false">
+            </div>
+            <div class="win-banner" id="winBanner" aria-hidden="true">🎉 WE DID IT! HAPPY PLANET! 🎉</div>
+        </div>
+        <div class="status-line" id="statusLine" role="status" aria-live="polite" aria-atomic="true"
+             data-tone="neutral">
+            <span class="status-icon" id="statusIcon" aria-hidden="true">🌟</span>
+            <div class="status-copy"><span class="status-caption" aria-hidden="true">LILENG SAYS…</span><span
+                    id="statusText">Speak English to help Lileng move forward!</span></div>
+        </div>
+    </main>
+    <div class="controls-row">
+        <nav class="controls" id="controls" aria-label="Game controls">
+            <button class="action minus" id="minus" type="button" aria-label="Minus: go back one star"
+                    title="Go back one star">−
+            </button>
+            <div class="stage-center">
+                <div class="stage-chip" id="stageCard" role="status" aria-live="polite" aria-atomic="true">
+                    <span class="emoji" id="stageIcon" aria-hidden="true">⭐</span>
+                    <div class="stage-details">
+                        <span class="stage-label">MISSION PROGRESS</span>
+                        <b id="chipStage">Star 1 of 8</b>
+                        <div class="stage-track" aria-hidden="true">
+                            <div class="stage-fill" id="stageFill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="action plus" id="plus" type="button" aria-label="Plus: go forward one star"
+                    title="Go forward one star">+
+            </button>
+        </nav>
+    </div>
+    <div class="settings" role="group" aria-label="Game settings">
+        <button class="setting-toggle" id="soundToggle" type="button" aria-pressed="true" aria-keyshortcuts="M"
+                title="Toggle sound (M)">🔊 Sound: on · M
+        </button>
+        <button class="setting-toggle" id="fullscreenToggle" type="button" aria-pressed="false" aria-keyshortcuts="F"
+                title="Toggle full screen (F)">⛶ Full screen: off · F
+        </button>
+        <p class="hint">Use <b>+</b> and <b>−</b> or arrow keys <kbd>→</kbd> <kbd>←</kbd>.</p>
+    </div>
+</div>
+<canvas class="magic-effects" id="magicEffects" aria-hidden="true"></canvas>
+</body>
+</html>
